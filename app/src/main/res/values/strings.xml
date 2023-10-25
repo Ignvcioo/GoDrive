@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GoDrive</string>
+    <string name="texto_bienvenida">Por favor, inicie sesión con su información</string>
+    <string name="bienvenida">Bienvenidos</string>
+    <string name="descripcion_imagen_google">Logotipo de Google</string>
+    <string name="texto_email">Email</string>
+    <string name="texto_contraseña">Contraseña</string>
+    <string name="texto_recuerdame">Recuerdame</string>
+    <string name="texto_cuenta_nueva">Crear una cuenta nueva</string>
+    <string name="texto_iniciar_sesión">Crear una cuenta nueva</string>
+    <string name="texto_otros_metodos">Otros métodos</string>
+    <string name="descripcion_imagen_facebook">Logo de Facebook</string>
+</resources>

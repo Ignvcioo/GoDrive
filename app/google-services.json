@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "373724960518",
+    "firebase_url": "https://uber-27c15-default-rtdb.firebaseio.com",
+    "project_id": "uber-27c15",
+    "storage_bucket": "uber-27c15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373724960518:android:eb48768e26fc4f92237087",
+        "android_client_info": {
+          "package_name": "com.ignacio.godrive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373724960518-2sln94b412so97f1fuicpmm8ap2u78da.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ignacio.godrive",
+            "certificate_hash": "e7aaffda46ab49527754d32ff22eab0bc7d697c3"
+          }
+        },
+        {
+          "client_id": "373724960518-7ek2fk2rdm825juaqobbqts6kud3dk1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFjZmdPrCH1D0PK-8qiGmFiWAk2QaBPrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373724960518-7ek2fk2rdm825juaqobbqts6kud3dk1t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

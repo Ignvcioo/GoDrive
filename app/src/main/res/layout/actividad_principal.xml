@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorWhite"
+    tools:context=".actividades.PrincipalActividad">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:padding="28dp"
+        android:gravity="top" >
+
+        <!-- Contenedor lineal para contenido dentro del CardView -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="100dp"
+            android:gravity="center">
+
+            <!-- Título "Bienvenidos" y mensaje de información -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GoDrive"
+                android:fontFamily="@font/fuente_secundaria"
+                android:textColor="@color/colorBlack"
+                android:textSize="50sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="237dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/icono_principal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Viaja con comodidad y seguridad: solicita un conductor en un instante y llega a tu destino con tranquilidad."
+                android:fontFamily="@font/fuente_principal"
+                android:textColor="@color/colorBlack"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginBottom="50dp" />
+
+            <Button
+                android:id="@+id/btnConductor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Conductor"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:padding="20dp"
+                android:background="@drawable/boton_cuadrado_naranja"
+                android:fontFamily="@font/fuente_secundaria"
+                android:textAllCaps="false"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"/>
+
+            <Button
+                android:id="@+id/btnCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Cliente"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:fontFamily="@font/fuente_secundaria"
+                android:background="@drawable/boton_cuadrado_gris"
+                android:padding="20dp"
+                android:textAllCaps="false"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

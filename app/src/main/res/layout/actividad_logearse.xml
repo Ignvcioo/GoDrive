@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".actividades.LogearseActividad">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:padding="28dp"
+        android:gravity="center">
+
+        <!-- Contenedor lineal para contenido dentro del CardView -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Título "Bienvenidos" y mensaje de información -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bienvenidos"
+                android:fontFamily="@font/fuente_secundaria"
+                android:alpha="0.8"
+                android:textColor="@color/colorBlack"
+                android:textSize="32sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Por favor, inicie sesión con su información."
+                android:fontFamily="@font/fuente_secundaria"
+                android:textColor="@color/colorBlack"
+                android:alpha="0.7"
+                android:layout_marginBottom="25dp"/>
+        </LinearLayout>
+
+        <!-- Campo de entrada para correo electrónico -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:fontFamily="@font/fuente_secundaria"
+            android:layout_gravity="bottom"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorBlack"
+                android:textColor="@color/colorBlack"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <!-- Campo de entrada para contraseña con icono de visibilidad -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Contraseña"
+            android:fontFamily="@font/fuente_secundaria"
+            android:layout_gravity="bottom"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtContrasenia"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/colorBlack"
+                android:textColor="@color/colorBlack"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Opción "Recuérdame" -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recuerdame"
+                android:fontFamily="@font/fuente_secundaria"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="25dp"
+                android:alpha="0.7"/>
+
+        </RelativeLayout>
+
+        <!-- Botón de inicio de sesión -->
+
+        <include
+            android:id="@+id/myProgressButton"
+            layout="@layout/progress_btn_layout"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Texto "Otros métodos" -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Otros métodos"
+            android:fontFamily="@font/fuente_secundaria"
+            android:textColor="@color/colorBlack"
+            android:layout_gravity="center"
+            android:alpha="0.7" />
+
+        <!-- Iconos para otros métodos de inicio de sesión -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="12dp"
+                android:background="@drawable/google"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="12dp"
+                android:background="@drawable/facebook" />
+
+        </LinearLayout>
+
+        <!-- Botón para registrar una nueva cuenta -->
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:text="¿No tienes una cuenta? Regístrate"
+            android:alpha="0.7"
+            android:fontFamily="@font/fuente_secundaria"
+            style="@style/LinkButton"
+            app:layout_constraintTop_toBottomOf="@+id/btnIniciarSesion" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
