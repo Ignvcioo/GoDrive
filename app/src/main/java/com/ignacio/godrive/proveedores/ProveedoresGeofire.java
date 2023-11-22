@@ -25,8 +25,8 @@ public class ProveedoresGeofire {
         geofire.removeLocation(idConductor);
     }
 
-    public GeoQuery ubicacionConductores(LatLng latLng){
-        GeoQuery geoQuery = geofire.queryAtLocation(new GeoLocation(latLng.latitude, latLng.longitude), 10);
+    public GeoQuery ubicacionConductores(LatLng latLng, double radio){
+        GeoQuery geoQuery = geofire.queryAtLocation(new GeoLocation(latLng.latitude, latLng.longitude), radio);
         geoQuery.removeAllListeners();
         return geoQuery;
     }

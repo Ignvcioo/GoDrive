@@ -7,20 +7,28 @@
     android:fitsSystemWindows="true"
     tools:context=".actividades.cliente.MapaClienteActividad">
 
+    <!-- Incluye el contenido del archivo "action_bar_toollbar" en esta vista -->
+
     <include layout="@layout/action_bar_toollbar"></include>
+
+    <!-- Fragmento de mapa de Google -->
 
     <fragment
         android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
-    
+
+    <!-- Contenedor lineal para las tarjetas de autocompletado de lugares -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_marginTop="20dp"
         android:orientation="vertical" >
+
+        <!-- Tarjeta 1: Autocompletado de lugar de origen -->
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -36,8 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
-
         </androidx.cardview.widget.CardView>
+
+        <!-- Tarjeta 2: Autocompletado de lugar de destino -->
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -52,28 +61,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
-
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/icono_cliente"
-        android:layout_gravity="center" />
+    <!-- Botón para solicitar un conductor -->
 
     <Button
         android:id="@+id/btnSolicitarConductor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/boton_cuadrado_naranja"
+        android:background="@drawable/boton_cuadrado_gris"
         android:text="Solicitar Viaje"
+        android:fontFamily="@font/fuente_principal"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
         android:textColor="@color/colorWhite"
         android:layout_gravity="bottom"
-        android:layout_margin="20dp" />
-    
-
-
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginBottom="20dp"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

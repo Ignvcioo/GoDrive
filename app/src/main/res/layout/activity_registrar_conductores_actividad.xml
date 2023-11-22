@@ -24,6 +24,8 @@
             android:orientation="vertical"
             android:padding="28dp">
 
+            <!-- Título "Registro" y mensaje de información.-->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,11 +51,15 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+            <!-- Icono de email -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/email" />
+
+            <!-- Campo de entrada para correo electrónico -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -68,8 +74,8 @@
                     android:fontFamily="@font/fuente_secundaria"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorBlack" />
-
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
 
@@ -79,12 +85,15 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+            <!-- Icono de usuario. -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/user" />
 
+            <!-- Campo de entrada para nombre completo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -109,11 +118,15 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+            <!-- Icono de contraseña -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/password" />
+
+            <!-- Campo de entrada para contraseña. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -138,11 +151,15 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+            <!-- Icono del vehiculo. -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/vehiculo" />
+
+            <!-- Campo de entrada para marca del vehiculo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -167,11 +184,15 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+            <!-- Icono de patente. -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/patente" />
+
+            <!-- Campo de entrada para patente del vehiculo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -198,10 +219,12 @@
         android:orientation="vertical"
         android:gravity="bottom">
 
+        <!-- Botón para registrarse. -->
+
         <Button
             android:id="@+id/btnRegistrar"
             android:layout_width="250dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
@@ -220,6 +243,8 @@
             android:orientation="horizontal"
             android:layout_marginBottom="30dp"
             android:gravity="center" >
+
+            <!-- Iconos de google y facebook. -->
 
             <ImageView
                 android:layout_width="40dp"

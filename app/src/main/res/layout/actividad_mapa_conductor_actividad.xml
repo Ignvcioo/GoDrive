@@ -7,13 +7,19 @@
     android:fitsSystemWindows="true"
     tools:context=".actividades.conductor.MapaConductorActividad">
 
+    <!-- Incluye el contenido del archivo "action_bar_toollbar" en esta vista -->
+
     <include layout="@layout/action_bar_toollbar" ></include>
+
+    <!-- Fragmento de mapa de Google -->
 
     <fragment
         android:id="@+id/mapa"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!-- Botón para conectarse un conductor -->
 
     <Button
         android:id="@+id/btnConectarse"
@@ -22,7 +28,7 @@
         android:text="Conectarse"
         android:textColor="@color/colorWhite"
         android:textStyle="bold"
-        android:background="@drawable/boton_cuadrado_naranja"
+        android:background="@drawable/boton_cuadrado_gris"
         android:fontFamily="@font/fuente_secundaria"
         android:textAllCaps="false"
         android:elevation="0dp"
@@ -30,6 +36,6 @@
         android:layout_marginRight="100dp"
         android:layout_marginLeft="100dp"
         android:layout_marginBottom="50dp"
-        android:stateListAnimator="@null"/>
+        android:stateListAnimator="@null" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -70,7 +70,6 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
-    private Marker marcadorCliente;
     private LatLng actualLatLng;
     private List<Marker> conductoresMarker = new ArrayList<>();
     private boolean primeraVez = true;
@@ -137,6 +136,7 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
         mapaFragmento.getMapAsync(this);
         btnSolicitarConductor = findViewById(R.id.btnSolicitarConductor);
 
+
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
@@ -152,7 +152,6 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
                 solicitarConductor();
             }
         });
-
     }
 
     private void solicitarConductor() {
@@ -162,6 +161,8 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
             intent.putExtra("origen_lng", origenLatLng.longitude);
             intent.putExtra("destino_lat", destinoLatLng.latitude);
             intent.putExtra("destino_lng", destinoLatLng.longitude);
+            intent.putExtra("origen", nombreOrigen);
+            intent.putExtra("destino", nombreDestino);
             startActivity(intent);
         }
         else {
@@ -226,11 +227,9 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
                     Geocoder geocoder = new Geocoder(MapaClienteActividad.this);
                     origenLatLng = mapa.getCameraPosition().target;
                     List<Address> addressList = geocoder.getFromLocation(origenLatLng.latitude, origenLatLng.longitude, 1);
-                    String ciudad = addressList.get(0).getLocality();
-                    String pais = addressList.get(0).getCountryName();
                     String direccion = addressList.get(0).getAddressLine(0);
-                    nombreOrigen = direccion + " " + ciudad;
-                    autocompleteSupportFragment.setText(direccion + " " + ciudad);
+                    nombreOrigen = direccion;
+                    autocompleteSupportFragment.setText(direccion);
                 } catch (Exception e){
                     Log.d("Error: ", "Mensaje de error: " + e.getMessage());
                 }
@@ -239,7 +238,7 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
     }
 
     private void ubicacionConductores() {
-        geofireProveedores.ubicacionConductores(actualLatLng).addGeoQueryEventListener(new GeoQueryEventListener() {
+        geofireProveedores.ubicacionConductores(actualLatLng, 10).addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
                 // Añadiremos los marcadores de los conductores que se conecten.

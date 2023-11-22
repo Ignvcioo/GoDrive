@@ -17,6 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoDrive"
         tools:targetApi="31">
+        
+        <service android:name=".services.MensajeFirebase"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        
+        <activity
+            android:name=".actividades.cliente.SolicitarConductorActividad"
+            android:exported="false" />
         <activity
             android:name=".actividades.cliente.DetalleSolicitudActividad"
             android:exported="false" />
@@ -40,7 +51,7 @@
             android:name=".actividades.cliente.MapaClienteActividad"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:theme="@style/Theme.botones" />
         <activity
             android:name=".actividades.conductor.RegistrarConductoresActividad"
             android:exported="false"
