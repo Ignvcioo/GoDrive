@@ -27,4 +27,8 @@ public class ProveedoresClientes {
         //Crea un nuevo registro de cliente en la base de datos o actualiza uno existente si el ID ya existe.
         return baseDatos.child(clientes.getId()).setValue(map);
     }
+
+    public DatabaseReference getClient(String idClient) {
+        return baseDatos.child(idClient);
+    }
 }

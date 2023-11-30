@@ -17,14 +17,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoDrive"
         tools:targetApi="31">
-        
-        <service android:name=".services.MensajeFirebase"
+        <activity
+            android:name=".actividades.conductor.MapDriverBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".actividades.cliente.MapClientBookingActivity"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.AcceptReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".receivers.CancelReceiver"
+            android:enabled="true" />
+
+        <service
+            android:name=".services.MyFirebaseMessagingClient"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        
+
         <activity
             android:name=".actividades.cliente.SolicitarConductorActividad"
             android:exported="false" />
@@ -65,7 +79,7 @@
             android:name=".actividades.PrincipalActividad"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.botones"></activity>
+            android:theme="@style/Theme.botones" />
         <activity
             android:name=".actividades.cliente.RegistrarActividad"
             android:exported="false"

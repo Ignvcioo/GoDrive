@@ -12,19 +12,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.geofire.GeoFire;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -36,36 +35,61 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.SquareCap;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.ignacio.godrive.R;
-import com.ignacio.godrive.actividades.PrincipalActividad;
-import com.ignacio.godrive.includes.MyToolBar;
+import com.ignacio.godrive.actividades.cliente.DetalleSolicitudActividad;
+import com.ignacio.godrive.proveedores.ClientBookingProvider;
 import com.ignacio.godrive.proveedores.ProveedoresAutenticacion;
+import com.ignacio.godrive.proveedores.ProveedoresClientes;
 import com.ignacio.godrive.proveedores.ProveedoresGeofire;
+import com.ignacio.godrive.proveedores.ProveedoresGoogleApi;
 import com.ignacio.godrive.proveedores.TokenProvider;
+import com.ignacio.godrive.utils.DecodePoints;
 
-public class MapaConductorActividad extends AppCompatActivity implements OnMapReadyCallback {
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MapDriverBookingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProveedoresAutenticacion proveedoresAutenticacion;
     private GoogleMap mapa;
     private SupportMapFragment mapaFragmento;
     private LocationRequest locationRequest;
     private ProveedoresGeofire geofireProveedores;
+    private ProveedoresClientes mClientProvider;
+    private ClientBookingProvider mClientBookingProvider;
     private TokenProvider mTokenProvider;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
     private Marker marcadorConductor;
-    private Button conductorConectado;
-    private boolean conductorActivo = false;
     private LatLng actualLatLng;
-    private ValueEventListener mListener;
+    private TextView mTextViewClientBooking;
+    private TextView mTextViewEmailClientBooking;
+    private TextView mTextViewOriginClientBooking;
+    private TextView mTextViewDestinationClientBooking;
+    private String mExtraClientId;
+    private LatLng origenLatLng;
+    private LatLng destinoLatLng;
+    private ProveedoresGoogleApi proveedoresGoogleApi;
+    private List<LatLng> PolyLineList;
+    private PolylineOptions polylineOptions;
+    private boolean primeraVez = true;
 
     // Callback para manejar actualizaciones de ubicación
     LocationCallback locationCallback = new LocationCallback() {
@@ -79,10 +103,10 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
                     }
 
                     marcadorConductor = mapa.addMarker(new MarkerOptions().position(
-                            new LatLng(location.getLatitude(), location.getLongitude())
-                            )
-                            .title("Tu posicion")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_auto))
+                                            new LatLng(location.getLatitude(), location.getLongitude())
+                                    )
+                                    .title("Tu posicion")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_auto))
                     );
 
                     // Actualiza la cámara del mapa a la ubicación actual
@@ -93,6 +117,10 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
                                     .build()
                     ));
                     updateLocacion();
+                    if (primeraVez) {
+                        primeraVez = false;
+                        getClientBooking();
+                    }
                 }
             }
         }
@@ -101,48 +129,100 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.actividad_mapa_conductor_actividad);
-        // Muestra la barra de herramientas personalizada
-        MyToolBar.show(this, "Conductor", false);
-
+        setContentView(R.layout.activity_map_driver_booking);
         proveedoresAutenticacion = new ProveedoresAutenticacion();
-        geofireProveedores = new ProveedoresGeofire("Conductores_Activos");
+        geofireProveedores = new ProveedoresGeofire("Conductores_Trabajando");
         mTokenProvider = new TokenProvider();
+        mClientProvider = new ProveedoresClientes();
+        mClientBookingProvider = new ClientBookingProvider();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mapaFragmento = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mapaFragmento.getMapAsync(this);
+        mTextViewClientBooking = findViewById(R.id.textViewClientBooking);
+        mTextViewEmailClientBooking = findViewById(R.id.textViewEmailClientBooking);
+        mTextViewOriginClientBooking = findViewById(R.id.textViewOriginClientBooking);
+        mTextViewDestinationClientBooking = findViewById(R.id.textViewDestinationClientBooking);
+        mExtraClientId = getIntent().getStringExtra("idClient");
+        proveedoresGoogleApi = new ProveedoresGoogleApi(MapDriverBookingActivity.this);
+        getClient();
 
-        conductorConectado = findViewById(R.id.btnConectarse);
-        conductorConectado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (conductorActivo){
-                    desconectado();
-                }
-                else {
-                    startLocation();
-                }
-            }
-        });
-
-        generateToken();
-        isDriverWorking();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mListener != null) {
-            geofireProveedores.isDriverWorking(proveedoresAutenticacion.getId()).removeEventListener(mListener);
-        }
-    }
-
-    private void isDriverWorking() {
-        mListener = geofireProveedores.isDriverWorking(proveedoresAutenticacion.getId()).addValueEventListener(new ValueEventListener() {
+    private void getClientBooking() {
+        mClientBookingProvider.getClientBooking(mExtraClientId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    desconectado();
+                    String destino = dataSnapshot.child("destination").getValue().toString();
+                    String origen = dataSnapshot.child("origin").getValue().toString();
+                    double destinoLat = Double.parseDouble(dataSnapshot.child("destinationLat").getValue().toString());
+                    double destinoLng = Double.parseDouble(dataSnapshot.child("destinationLng").getValue().toString());
+
+                    double originLat = Double.parseDouble(dataSnapshot.child("originLat").getValue().toString());
+                    double originLng = Double.parseDouble(dataSnapshot.child("originLng").getValue().toString());
+                    origenLatLng = new LatLng(originLat, originLng);
+                    destinoLatLng = new LatLng(destinoLat, destinoLng);
+                    mTextViewOriginClientBooking.setText("Recoger en: " + origen);
+                    mTextViewDestinationClientBooking.setText("Destino" + destino);
+                    mapa.addMarker(new MarkerOptions().position(origenLatLng).title("Recoger aqui").icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_pin)));
+                    marcadorRuta();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void marcadorRuta(){
+        proveedoresGoogleApi.getDirections(actualLatLng, origenLatLng).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body());
+                    JSONArray jsonArray = jsonObject.getJSONArray("routes");
+                    JSONObject route = jsonArray.getJSONObject(0);
+                    JSONObject polylines = route.getJSONObject("overview_polyline");
+                    String points = polylines.getString("points");
+                    PolyLineList = DecodePoints.decodePoly(points);
+                    polylineOptions = new PolylineOptions();
+                    polylineOptions.color(Color.DKGRAY);
+                    polylineOptions.width(18f);
+                    polylineOptions.startCap(new SquareCap());
+                    polylineOptions.jointType(JointType.ROUND);
+                    polylineOptions.addAll(PolyLineList);
+                    mapa.addPolyline(polylineOptions);
+
+                    JSONArray legs = route.getJSONArray("legs");
+                    JSONObject leg = legs.getJSONObject(0);
+                    JSONObject distance = leg.getJSONObject("distance");
+                    JSONObject duration = leg.getJSONObject("duration");
+                    String distanciaTexto = distance.getString("text");
+                    String duracionTexto = duration.getString("text");
+
+                } catch (Exception e){
+                    Log.d("Error", "Mensaje de error:" + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getClient() {
+        mClientProvider.getClient(mExtraClientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String email = dataSnapshot.child("email").getValue().toString();
+                    String nombre = dataSnapshot.child("nombre").getValue().toString();
+                    mTextViewClientBooking.setText(nombre);
+                    mTextViewEmailClientBooking.setText(email);
                 }
             }
 
@@ -174,6 +254,8 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setSmallestDisplacement(5);
+
+        startLocation();
 
 
     }
@@ -246,8 +328,7 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
             marcadorConductor.remove();
         }
         if (fusedLocationProviderClient != null){
-            conductorConectado.setText("Conectarse");
-            conductorActivo = false;
+
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);
             if (proveedoresAutenticacion.sesionExistente()){
                 geofireProveedores.EliminarLocalicacion(proveedoresAutenticacion.getId());
@@ -264,8 +345,6 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 if (gpsActived()){
-                    conductorConectado.setText("Desconectarse");
-                    conductorActivo = true;
                     // Solicita actualizaciones de ubicación
                     fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                 }
@@ -299,7 +378,7 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // Solicita permisos de ubicación
-                                ActivityCompat.requestPermissions(MapaConductorActividad.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                                ActivityCompat.requestPermissions(MapDriverBookingActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                             }
                         })
                         .create()
@@ -307,35 +386,7 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
             }
             else {
                 // Solicita permisos de ubicación
-                ActivityCompat.requestPermissions(MapaConductorActividad.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);            }
+                ActivityCompat.requestPermissions(MapDriverBookingActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);            }
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.conductor_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_cerrarSesion){
-            cerrarSesion();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    void cerrarSesion(){
-        desconectado();
-        proveedoresAutenticacion.cerrarSesion();
-        Intent intent = new Intent(MapaConductorActividad.this, PrincipalActividad.class);
-        startActivity(intent);
-        finish();
-    }
-
-    void generateToken() {
-        mTokenProvider.create(proveedoresAutenticacion.getId());
-    }
-
 }
-

@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
 import com.ignacio.godrive.R;
-import com.ignacio.godrive.actividades.utils.DecodePoints;
+import com.ignacio.godrive.utils.DecodePoints;
 import com.ignacio.godrive.includes.MyToolBar;
 import com.ignacio.godrive.proveedores.ProveedoresGoogleApi;
 
@@ -97,6 +97,10 @@ public class DetalleSolicitudActividad extends AppCompatActivity implements OnMa
         Intent intent = new Intent(DetalleSolicitudActividad.this, SolicitarConductorActividad.class);
         intent.putExtra("origin_lat", origenLatLng.latitude);
         intent.putExtra("origin_lng", origenLatLng.longitude);
+        intent.putExtra("origin", extraOrigen);
+        intent.putExtra("destination", extraDestino);
+        intent.putExtra("destination_lat", destinoLatLng.latitude);
+        intent.putExtra("destination_lng", destinoLatLng.longitude);
         startActivity(intent);
         finish();
     }

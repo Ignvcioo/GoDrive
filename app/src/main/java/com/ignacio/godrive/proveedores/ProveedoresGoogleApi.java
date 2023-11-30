@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ignacio.godrive.R;
-import com.ignacio.godrive.actividades.retrofit.IGoogleApi;
-import com.ignacio.godrive.actividades.retrofit.RetrofitCliente;
+import com.ignacio.godrive.retrofit.IGoogleApi;
+import com.ignacio.godrive.retrofit.RetrofitCliente;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.ignacio.godrive.actividades.retrofit;
+package com.ignacio.godrive.retrofit;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

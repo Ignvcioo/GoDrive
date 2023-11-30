@@ -1,4 +1,4 @@
-package com.ignacio.godrive.actividades.utils;
+package com.ignacio.godrive.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 

@@ -56,6 +56,8 @@ import com.ignacio.godrive.actividades.PrincipalActividad;
 import com.ignacio.godrive.includes.MyToolBar;
 import com.ignacio.godrive.proveedores.ProveedoresAutenticacion;
 import com.ignacio.godrive.proveedores.ProveedoresGeofire;
+import com.ignacio.godrive.proveedores.TokenProvider;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +69,7 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
     private SupportMapFragment mapaFragmento;
     private LocationRequest locationRequest;
     private ProveedoresGeofire geofireProveedores;
+    private TokenProvider mTokenProvider;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
@@ -130,7 +133,8 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
         MyToolBar.show(this, "Cliente", false);
 
         proveedoresAutenticacion = new ProveedoresAutenticacion();
-        geofireProveedores = new ProveedoresGeofire();
+        geofireProveedores = new ProveedoresGeofire("Conductores_Activos");
+        mTokenProvider = new TokenProvider();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mapaFragmento = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mapaFragmento.getMapAsync(this);
@@ -145,6 +149,8 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
         instanciaAutocompleteOrigen();
         instanciaAutocompleteDestino();
         onCameraMove();
+
+        generateToken();
 
         btnSolicitarConductor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -455,5 +461,9 @@ public class MapaClienteActividad extends AppCompatActivity implements OnMapRead
         Intent intent = new Intent(MapaClienteActividad.this, PrincipalActividad.class);
         startActivity(intent);
         finish();
+    }
+
+    void generateToken() {
+        mTokenProvider.create(proveedoresAutenticacion.getId());
     }
 }
