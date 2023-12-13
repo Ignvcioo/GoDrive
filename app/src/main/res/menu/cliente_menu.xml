@@ -4,5 +4,6 @@
 
     <item android:id="@+id/action_cerrarSesion"
         android:title="Cerrar Sesión"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
+
 </menu>

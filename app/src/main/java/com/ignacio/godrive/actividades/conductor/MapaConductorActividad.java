@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ignacio.godrive.R;
 import com.ignacio.godrive.actividades.PrincipalActividad;
@@ -133,9 +134,13 @@ public class MapaConductorActividad extends AppCompatActivity implements OnMapRe
     protected void onDestroy() {
         super.onDestroy();
         if (mListener != null) {
-            geofireProveedores.isDriverWorking(proveedoresAutenticacion.getId()).removeEventListener(mListener);
+            DatabaseReference driverWorkingRef = geofireProveedores.isDriverWorking(proveedoresAutenticacion.getId());
+            if (driverWorkingRef != null) {
+                driverWorkingRef.removeEventListener(mListener);
+            }
         }
     }
+
 
     private void isDriverWorking() {
         mListener = geofireProveedores.isDriverWorking(proveedoresAutenticacion.getId()).addValueEventListener(new ValueEventListener() {

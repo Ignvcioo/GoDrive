@@ -20,10 +20,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.L;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -41,12 +43,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.ignacio.godrive.R;
 import com.ignacio.godrive.actividades.cliente.DetalleSolicitudActividad;
+import com.ignacio.godrive.actividades.cliente.SolicitarConductorActividad;
+import com.ignacio.godrive.modelo.ClientBooking;
+import com.ignacio.godrive.modelo.FCMBody;
+import com.ignacio.godrive.modelo.FCMResponse;
 import com.ignacio.godrive.proveedores.ClientBookingProvider;
+import com.ignacio.godrive.proveedores.NotificationProvider;
 import com.ignacio.godrive.proveedores.ProveedoresAutenticacion;
 import com.ignacio.godrive.proveedores.ProveedoresClientes;
 import com.ignacio.godrive.proveedores.ProveedoresGeofire;
@@ -57,7 +65,9 @@ import com.ignacio.godrive.utils.DecodePoints;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,6 +84,7 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
     private ClientBookingProvider mClientBookingProvider;
     private TokenProvider mTokenProvider;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private NotificationProvider mNotificationProvider;
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
@@ -90,6 +101,9 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
     private List<LatLng> PolyLineList;
     private PolylineOptions polylineOptions;
     private boolean primeraVez = true;
+    private Button mButtonStartBooking;
+    private Button mButtonFinishBooking;
+    private boolean mIsCloseToClient = false;
 
     // Callback para manejar actualizaciones de ubicación
     LocationCallback locationCallback = new LocationCallback() {
@@ -142,10 +156,63 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
         mTextViewEmailClientBooking = findViewById(R.id.textViewEmailClientBooking);
         mTextViewOriginClientBooking = findViewById(R.id.textViewOriginClientBooking);
         mTextViewDestinationClientBooking = findViewById(R.id.textViewDestinationClientBooking);
+        mButtonStartBooking = findViewById(R.id.btnStartBooking);
+        mButtonFinishBooking = findViewById(R.id.btnFinishBooking);
+        mNotificationProvider = new NotificationProvider();
+        //mButtonStartBooking.setEnabled(false);
         mExtraClientId = getIntent().getStringExtra("idClient");
         proveedoresGoogleApi = new ProveedoresGoogleApi(MapDriverBookingActivity.this);
         getClient();
 
+        mButtonStartBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startBooking();
+            }
+        });
+
+        mButtonFinishBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishBooking();
+            }
+        });
+    }
+
+    private void finishBooking() {
+        mClientBookingProvider.updateStatus(mExtraClientId, "finish");
+        mClientBookingProvider.updateIdHistoryBooking(mExtraClientId);
+        sendNotification("Viaje finalizado");
+        if (fusedLocationProviderClient != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+        geofireProveedores.EliminarLocalicacion(proveedoresAutenticacion.getId());
+        Intent intent = new Intent(MapDriverBookingActivity.this, CalificacionClienteActivity.class);
+        intent.putExtra("idClient", mExtraClientId);
+        startActivity(intent);
+        finish();
+    }
+
+    private void startBooking() {
+        mClientBookingProvider.updateStatus(mExtraClientId, "start");
+        mButtonStartBooking.setVisibility(View.GONE);
+        mButtonFinishBooking.setVisibility(View.VISIBLE);
+        mapa.clear();
+        mapa.addMarker(new MarkerOptions().position(destinoLatLng).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_pin)));
+        marcadorRuta(destinoLatLng);
+        sendNotification("Viaje iniciado");
+    }
+
+    private double getDistanceBetween(LatLng clientLatLng, LatLng driverLatLng) {
+        double distance = 0;
+        Location clientLocation = new Location("");
+        Location driverLocation = new Location("");
+        clientLocation.setLatitude(clientLatLng.latitude);
+        clientLocation.setLongitude(clientLatLng.longitude);
+        driverLocation.setLatitude(driverLatLng.latitude);
+        driverLocation.setLongitude(driverLatLng.longitude);
+        distance = clientLocation.distanceTo(driverLocation);
+        return distance;
     }
 
     private void getClientBooking() {
@@ -162,10 +229,10 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
                     double originLng = Double.parseDouble(dataSnapshot.child("originLng").getValue().toString());
                     origenLatLng = new LatLng(originLat, originLng);
                     destinoLatLng = new LatLng(destinoLat, destinoLng);
-                    mTextViewOriginClientBooking.setText("Recoger en: " + origen);
-                    mTextViewDestinationClientBooking.setText("Destino" + destino);
+                    mTextViewOriginClientBooking.setText("Origen: " + origen);
+                    mTextViewDestinationClientBooking.setText("Destino: " + destino);
                     mapa.addMarker(new MarkerOptions().position(origenLatLng).title("Recoger aqui").icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_pin)));
-                    marcadorRuta();
+                    marcadorRuta(origenLatLng);
                 }
             }
 
@@ -176,8 +243,8 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
         });
     }
 
-    private void marcadorRuta(){
-        proveedoresGoogleApi.getDirections(actualLatLng, origenLatLng).enqueue(new Callback<String>() {
+    private void marcadorRuta(LatLng latLng){
+        proveedoresGoogleApi.getDirections(actualLatLng, latLng).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 try {
@@ -221,8 +288,8 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
                 if (dataSnapshot.exists()) {
                     String email = dataSnapshot.child("email").getValue().toString();
                     String nombre = dataSnapshot.child("nombre").getValue().toString();
-                    mTextViewClientBooking.setText(nombre);
-                    mTextViewEmailClientBooking.setText(email);
+                    mTextViewClientBooking.setText("Cliente: " + nombre);
+                    mTextViewEmailClientBooking.setText("Email del cliente: " + email);
                 }
             }
 
@@ -236,6 +303,11 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
     private void updateLocacion(){
         if (proveedoresAutenticacion.sesionExistente() && actualLatLng != null){
             geofireProveedores.GuardarLocalicacion(proveedoresAutenticacion.getId(), actualLatLng);
+            if (!mIsCloseToClient) {
+                if (origenLatLng != null && actualLatLng != null) {
+                    mIsCloseToClient = true;
+                }
+            }
         }
     }
 
@@ -388,5 +460,48 @@ public class MapDriverBookingActivity extends AppCompatActivity implements OnMap
                 // Solicita permisos de ubicación
                 ActivityCompat.requestPermissions(MapDriverBookingActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);            }
         }
+    }
+
+    private void sendNotification(final String status) {
+        mTokenProvider.getToken(mExtraClientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String token = dataSnapshot.child("token").getValue().toString();
+                    Map<String, String> map = new HashMap<>();
+                    map.put("titulo", "ESTADO DE TU VIAJE");
+                    map.put("contenido",
+                            "Tu estado del viaje es: " + status);
+
+                    FCMBody fcmBody = new FCMBody(token, "high", "4500s", map);
+                    mNotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
+                        @Override
+                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                            if (response.body() != null) {
+                                if (response.body().getSuccess() != 1) {
+                                    Toast.makeText(MapDriverBookingActivity.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else {
+                                Toast.makeText(MapDriverBookingActivity.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                            Log.d("Error", "Error" + t.getMessage());
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(MapDriverBookingActivity.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

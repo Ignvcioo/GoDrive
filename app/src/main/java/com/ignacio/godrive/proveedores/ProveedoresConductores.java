@@ -20,4 +20,8 @@ public class ProveedoresConductores {
         // Crea un nuevo registro de conductor en la base de datos o actualiza uno existente si el ID ya existe.
         return baseDatos.child(conductores.getId()).setValue(conductores);
     }
+
+    public DatabaseReference getDriver(String idDriver) {
+        return baseDatos.child(idDriver);
+    }
 }

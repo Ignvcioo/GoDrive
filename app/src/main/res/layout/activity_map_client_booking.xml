@@ -7,10 +7,100 @@
     android:fitsSystemWindows="true"
     tools:context=".actividades.cliente.MapClientBookingActivity">
 
-    <fragment
-        android:id="@+id/mapa"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:visibility="invisible"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/textViewStatusBooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="Estado" />
+
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:orientation="vertical" >
+
+        <fragment
+            android:id="@+id/mapa"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="25dp">
+
+                    <TextView
+                        android:id="@+id/textViewOriginDriverBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Origen: "
+                        android:fontFamily="@font/fuente_secundaria"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewDestinationDriverBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Destino: "
+                        android:fontFamily="@font/fuente_secundaria"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewDriverBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre del conductor: "
+                        android:fontFamily="@font/fuente_secundaria"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewEmailDriverBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email del conductor: "
+                        android:fontFamily="@font/fuente_secundaria"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="16sp" />
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginBottom="75dp"
             android:gravity="center">
 
             <!-- Título "Bienvenidos" y mensaje de información -->
@@ -31,60 +32,47 @@
                 android:layout_height="wrap_content"
                 android:text="Bienvenidos"
                 android:fontFamily="@font/fuente_secundaria"
-                android:alpha="0.8"
                 android:textColor="@color/colorBlack"
-                android:textSize="32sp"/>
+                android:textSize="38sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Por favor, inicie sesión con su información."
-                android:fontFamily="@font/fuente_secundaria"
+                android:fontFamily="@font/fuente_principal"
                 android:textColor="@color/colorBlack"
-                android:alpha="0.7"
+                android:textSize="16sp"
                 android:layout_marginBottom="25dp"/>
         </LinearLayout>
 
         <!-- Campo de entrada para correo electrónico -->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:fontFamily="@font/fuente_secundaria"
-            android:layout_gravity="bottom"
-            android:textStyle="bold" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp" >
+            android:layout_height="60dp"
+            android:hint="Correo electrónico"
+            app:startIconDrawable="@drawable/baseline_email_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorBlack"
+                android:fontFamily="@font/fuente_secundaria"
                 android:textColor="@color/colorBlack"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <!-- Campo de entrada para contraseña con icono de visibilidad -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Contraseña"
-            android:fontFamily="@font/fuente_secundaria"
-            android:layout_gravity="bottom"
-            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            app:endIconMode="password_toggle">
+            app:endIconMode="password_toggle"
+            android:hint="Contraseña"
+            android:layout_marginTop="20dp"
+            app:startIconDrawable="@drawable/baseline_lock_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtContrasenia"
@@ -92,6 +80,7 @@
                 android:backgroundTint="@color/colorBlack"
                 android:textColor="@color/colorBlack"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/fuente_secundaria"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,9 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recuerdame"
-                android:fontFamily="@font/fuente_secundaria"
+                android:fontFamily="@font/fuente_principal"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="25dp"
                 android:alpha="0.7"/>
@@ -124,42 +112,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp" />
 
-        <!-- Texto "Otros métodos" -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Otros métodos"
-            android:fontFamily="@font/fuente_secundaria"
-            android:textColor="@color/colorBlack"
-            android:layout_gravity="center"
-            android:alpha="0.7" />
-
-        <!-- Iconos para otros métodos de inicio de sesión -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center" >
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="12dp"
-                android:background="@drawable/google"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="12dp"
-                android:background="@drawable/facebook" />
-
-        </LinearLayout>
 
         <!-- Botón para registrar una nueva cuenta -->
-
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegistrar"
@@ -167,8 +121,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorBlack"
             android:text="¿No tienes una cuenta? Regístrate"
-            android:alpha="0.7"
             android:fontFamily="@font/fuente_secundaria"
+            android:textSize="15sp"
             style="@style/LinkButton"
             app:layout_constraintTop_toBottomOf="@+id/btnIniciarSesion" />
 

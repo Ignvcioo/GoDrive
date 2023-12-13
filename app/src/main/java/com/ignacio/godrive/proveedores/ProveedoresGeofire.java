@@ -31,7 +31,17 @@ public class ProveedoresGeofire {
         return geoQuery;
     }
 
-    public DatabaseReference isDriverWorking(String idDriver) {
-        return FirebaseDatabase.getInstance().getReference().child("Conductores_Trabajando").child(idDriver);
+    public DatabaseReference getDriverLocation(String idDriver) {
+        return baseDatos.child(idDriver).child("l");
     }
+
+    public DatabaseReference isDriverWorking(String idDriver) {
+        if (idDriver != null) {
+            return FirebaseDatabase.getInstance().getReference().child("Conductores_Trabajando").child(idDriver);
+        } else {
+            // Manejar el caso en que idDriver es nulo
+            return null;
+        }
+    }
+
 }

@@ -1,11 +1,14 @@
 package com.ignacio.godrive.services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -14,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ignacio.godrive.R;
+import com.ignacio.godrive.actividades.conductor.NotificationBookingActivity;
 import com.ignacio.godrive.channel.NotificationHelper;
 import com.ignacio.godrive.receivers.AcceptReceiver;
 import com.ignacio.godrive.receivers.CancelReceiver;
@@ -41,7 +45,17 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (titulo.contains("Solicitud de servicio")) {
                     String idClient = data.get("idClient");
+                    String origin = data.get("origin");
+                    String destination = data.get("destination");
+                    String min = data.get("min");
+                    String distance = data.get("distance");
                     showNotificationApiOreoActions(titulo, contenido, idClient);
+                    showNotificationActivity(idClient, origin, destination, min, distance);
+                }
+                else if(titulo.contains("Viaje cancelado")) {
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.cancel(2);
+                    showNotificationApiOreo(titulo, contenido);
                 }
                 else {
                     showNotificationApiOreo(titulo, contenido);
@@ -51,6 +65,16 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
                 if (titulo.contains("Solicitud de servicio")) {
                     String idClient = data.get("idClient");
                     showNotificationActions(titulo, contenido, idClient);
+                    String origin = data.get("origin");
+                    String destination = data.get("destination");
+                    String min = data.get("min");
+                    String distance = data.get("distance");
+                    showNotificationActivity(idClient, origin, destination, min, distance);
+                }
+                else if(titulo.contains("Viaje cancelado")) {
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.cancel(2);
+                    showNotification(titulo, contenido);
                 }
                 else {
                     showNotification(titulo, contenido);
@@ -58,6 +82,28 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
 
             }
         }
+    }
+
+    private void showNotificationActivity(String idClient, String origin, String destination, String min, String distance) {
+        PowerManager pm = (PowerManager) getBaseContext().getSystemService(Context.POWER_SERVICE);
+        boolean idScreenOn = pm.isScreenOn();
+        if (!idScreenOn) {
+            PowerManager.WakeLock wakeLock = pm.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK |
+                            PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                            PowerManager.ON_AFTER_RELEASE,
+                    "AppName:MyLock"
+            );
+            wakeLock.acquire(10000);
+        }
+        Intent intent = new Intent(getBaseContext(), NotificationBookingActivity.class);
+        intent.putExtra("idClient", idClient);
+        intent.putExtra("origin", origin);
+        intent.putExtra("destination", destination);
+        intent.putExtra("min", min);
+        intent.putExtra("distance", distance);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void showNotification(String titulo, String contenido) {

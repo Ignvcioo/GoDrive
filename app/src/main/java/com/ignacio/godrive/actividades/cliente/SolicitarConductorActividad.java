@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,7 +94,24 @@ public class SolicitarConductorActividad extends AppCompatActivity {
         mTokenProvider = new TokenProvider();
         mClientBookingProvider = new ClientBookingProvider();
         proveedoresAutenticacion = new ProveedoresAutenticacion();
+
+        btnCancelarViaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelRequest();
+            }
+        });
+
         obtenerConductorCercano();
+    }
+
+    private void cancelRequest() {
+        mClientBookingProvider.delete(proveedoresAutenticacion.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                sendNotificationCancel();
+            }
+        });
     }
 
     private void obtenerConductorCercano() {
@@ -174,6 +192,56 @@ public class SolicitarConductorActividad extends AppCompatActivity {
         });
     }
 
+    private void sendNotificationCancel() {
+        mTokenProvider.getToken(idConductorEncontrado).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String token = dataSnapshot.child("token").getValue().toString();
+                    Map<String, String> map = new HashMap<>();
+                    map.put("titulo", "Viaje cancelado");
+                    map.put("contenido",
+                            "El cliente cancelo la solicitud"
+                    );
+                    FCMBody fcmBody = new FCMBody(token, "high", "4500s", map);
+                    mNotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
+                        @Override
+                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                            if (response.body() != null) {
+                                if (response.body().getSuccess() == 1) {
+                                    Toast.makeText(SolicitarConductorActividad.this, "La solicitud se cancelo", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(SolicitarConductorActividad.this, MapaClienteActividad.class);
+                                    startActivity(intent);
+                                    finish();
+                                    //Toast.makeText(SolicitarConductorActividad.this, "La notificacion se ha enviado correctamente.", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Toast.makeText(SolicitarConductorActividad.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else {
+                                Toast.makeText(SolicitarConductorActividad.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                            Log.d("Error", "Error" + t.getMessage());
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(SolicitarConductorActividad.this, "No se pudo enviar la notificacion.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void sendNotification(final String tiempo, final String distancia) {
         mTokenProvider.getToken(idConductorEncontrado).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -187,7 +255,11 @@ public class SolicitarConductorActividad extends AppCompatActivity {
                             "Destino: " + mExtraDestination);
 
                     map.put("idClient", proveedoresAutenticacion.getId());
-                    FCMBody fcmBody = new FCMBody(token, "high", map);
+                    map.put("origin", mExtraOrigin);
+                    map.put("destination", mExtraDestination);
+                    map.put("min", tiempo);
+                    map.put("distance", distancia);
+                    FCMBody fcmBody = new FCMBody(token, "high", "4500s", map);
                     mNotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
                         @Override
                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {

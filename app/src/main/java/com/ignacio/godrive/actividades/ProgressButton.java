@@ -37,7 +37,7 @@ public class ProgressButton {
     }
 
     void botonFallado(){
-        layout.setBackgroundColor(cardView.getResources().getColor(R.color.colorPrimary));
+        layout.setBackgroundColor(cardView.getResources().getColor(R.color.colorBlue));
         progressBar.setVisibility(View.GONE);
         textView.setText("Iniciar Sesión");
         progressBar.clearAnimation();

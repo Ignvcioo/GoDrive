@@ -61,7 +61,7 @@ public class DetalleSolicitudActividad extends AppCompatActivity implements OnMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_solicitud_actividad);
-        MyToolBar.show(this, "DATOS DE VIAJE", true);
+        MyToolBar.show(this, "Datos del viaje", false);
 
         mapaFragmento = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mapaFragmento.getMapAsync(this);
@@ -117,7 +117,7 @@ public class DetalleSolicitudActividad extends AppCompatActivity implements OnMa
                    String points = polylines.getString("points");
                    PolyLineList = DecodePoints.decodePoly(points);
                    polylineOptions = new PolylineOptions();
-                   polylineOptions.color(Color.DKGRAY);
+                   polylineOptions.color(Color.BLACK);
                    polylineOptions.width(18f);
                    polylineOptions.startCap(new SquareCap());
                    polylineOptions.jointType(JointType.ROUND);

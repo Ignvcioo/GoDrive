@@ -3,6 +3,7 @@ package com.ignacio.godrive.proveedores;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 // Clase que proporciona métodos para la autenticación de usuarios mediante Firebase Authentication.
 public class ProveedoresAutenticacion {
@@ -28,9 +29,17 @@ public class ProveedoresAutenticacion {
         autenticacion.signOut();
     }
 
-    public String getId(){
-        return autenticacion.getCurrentUser().getUid();
+    public String getId() {
+        String id = null;
+        FirebaseUser user = autenticacion.getCurrentUser();
+
+        if (user != null) {
+            id = user.getUid();
+        }
+
+        return id;
     }
+
 
     public boolean sesionExistente(){
         boolean existente = false;

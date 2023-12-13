@@ -70,16 +70,18 @@
         android:id="@+id/btnSolicitarConductor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/boton_cuadrado_gris"
         android:text="Solicitar Viaje"
-        android:fontFamily="@font/fuente_principal"
-        android:elevation="0dp"
-        android:stateListAnimator="@null"
         android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/boton_cuadrado_azul"
+        android:fontFamily="@font/fuente_secundaria"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginBottom="20dp"/>
+        android:textAllCaps="false"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

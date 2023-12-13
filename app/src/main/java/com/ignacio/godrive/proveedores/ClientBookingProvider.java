@@ -24,11 +24,22 @@ public class ClientBookingProvider {
         return mDatabase.child(idClientBooking).updateChildren(map);
     }
 
+    public Task<Void> updateIdHistoryBooking(String idClientBooking) {
+        String idPush = mDatabase.push().getKey();
+        Map<String, Object> map = new HashMap<>();
+        map.put("idHistoryBooking", idPush);
+        return mDatabase.child(idClientBooking).updateChildren(map);
+    }
+
     public DatabaseReference getStatus(String idClientBooking) {
         return mDatabase.child(idClientBooking).child("status");
     }
 
     public DatabaseReference getClientBooking(String idClientBooking) {
         return mDatabase.child(idClientBooking);
+    }
+
+    public Task<Void> delete(String idClientBooking) {
+        return mDatabase.child(idClientBooking).removeValue();
     }
 }

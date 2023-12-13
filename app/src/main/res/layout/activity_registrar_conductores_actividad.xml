@@ -13,9 +13,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
         android:gravity="top"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:padding="26dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,48 +30,46 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registro de Conductores"
+                android:text="Registro de Conductor"
                 android:fontFamily="@font/fuente_secundaria"
                 android:textAlignment="center"
                 android:textColor="@color/colorBlack"
-                android:textSize="32sp" />
+                android:textSize="28sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:alpha="0.7"
                 android:text="Por favor, registrese con su información"
                 android:fontFamily="@font/fuente_secundaria"
+                android:textSize="16sp"
                 android:textColor="@color/colorBlack" />
+
+
+
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
-
-            <!-- Icono de email -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/email" />
 
             <!-- Campo de entrada para correo electrónico -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp" >
+                android:layout_height="60dp"
+                android:hint="Correo electrónico"
+                app:startIconDrawable="@drawable/baseline_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtInputEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:hint="Correo electrónico"
                     android:fontFamily="@font/fuente_secundaria"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorBlack" />
@@ -85,27 +84,19 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-            <!-- Icono de usuario. -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/user" />
-
             <!-- Campo de entrada para nombre completo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp" >
+                android:layout_height="60dp"
+                android:hint="Nombre completo"
+                app:startIconDrawable="@drawable/baseline_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtInputNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:fontFamily="@font/fuente_secundaria"
-                    android:hint="Nombre completo"
                     android:inputType="text"
                     android:textColor="@color/colorBlack" />
 
@@ -118,27 +109,19 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-            <!-- Icono de contraseña -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/password" />
-
             <!-- Campo de entrada para contraseña. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp" >
+                android:layout_height="60dp"
+                android:hint="Contraseña"
+                app:startIconDrawable="@drawable/baseline_lock_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtInputContrasenia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fuente_secundaria"
-                    android:layout_marginLeft="10dp"
-                    android:hint="Contraseña"
                     android:inputType="textPassword"
                     android:textColor="@color/colorBlack" />
 
@@ -151,27 +134,19 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-            <!-- Icono del vehiculo. -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/vehiculo" />
-
             <!-- Campo de entrada para marca del vehiculo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp" >
+                android:layout_height="60dp"
+                android:hint="Marca del vehiculo"
+                app:startIconDrawable="@drawable/baseline_directions_car_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtInputMarca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:fontFamily="@font/fuente_secundaria"
-                    android:hint="Marca del vehiculo"
                     android:inputType="text"
                     android:textColor="@color/colorBlack" />
 
@@ -184,27 +159,19 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-            <!-- Icono de patente. -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/patente" />
-
             <!-- Campo de entrada para patente del vehiculo. -->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp" >
+                android:layout_height="60dp"
+                android:hint="Patente del vehiculo"
+                app:startIconDrawable="@drawable/baseline_library_add_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtInputPatente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:fontFamily="@font/fuente_secundaria"
-                    android:hint="Patente del vehiculo"
                     android:inputType="text"
                     android:textColor="@color/colorBlack" />
 
@@ -228,36 +195,15 @@
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="50dp"
             android:fontFamily="@font/fuente_secundaria"
             android:text="Registrarse"
-            android:background="@drawable/boton_cuadrado_naranja"
+            android:background="@drawable/boton_cuadrado_azul"
             android:textColor="@color/colorWhite"
             android:textAllCaps="false"
             android:elevation="0dp"
             android:stateListAnimator="@null"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="30dp"
-            android:gravity="center" >
-
-            <!-- Iconos de google y facebook. -->
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="12dp"
-                android:background="@drawable/google" />
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="12dp"
-                android:background="@drawable/facebook" />
-        </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

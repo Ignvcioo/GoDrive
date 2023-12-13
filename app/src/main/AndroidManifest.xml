@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +19,28 @@
         android:theme="@style/Theme.GoDrive"
         tools:targetApi="31">
         <activity
+            android:name=".actividades.conductor.NotificationBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.botones"
+            android:exported="false" />
+        <activity
+            android:name=".actividades.cliente.CalificationDriverActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.botones"
+            android:exported="false" />
+        <activity
+            android:name=".actividades.conductor.CalificacionClienteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.botones"
+            android:exported="false" />
+        <activity
             android:name=".actividades.conductor.MapDriverBookingActivity"
+            android:theme="@style/Theme.botones"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".actividades.cliente.MapClientBookingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <receiver
@@ -41,9 +60,13 @@
 
         <activity
             android:name=".actividades.cliente.SolicitarConductorActividad"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.botones"
             android:exported="false" />
         <activity
             android:name=".actividades.cliente.DetalleSolicitudActividad"
+            android:theme="@style/Theme.botones"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".actividades.MainActivity"
@@ -52,7 +75,6 @@
             android:theme="@style/Theme.botones">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -84,7 +106,7 @@
             android:name=".actividades.cliente.RegistrarActividad"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.botones" />
+            android:theme="@style/Theme.botones"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
